@@ -1,8 +1,7 @@
 ----------Projet Python3 3I SI----------
 
------Groupe composé de-----
-- Alexandra TOUSSAINT
-- Clément DAVID
+-----Groupe composé de-----T
+- Baptiste FONTANA
 - Arnaud ZOBEC
 --------------------------
 
