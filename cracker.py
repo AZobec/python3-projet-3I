@@ -42,9 +42,9 @@ def iteration_mdp(destination,chars):
 	_range_ = input("")
 	_range_ = _range_.split(";")
 	for length in range(int(_range_[0]), int(_range_[1])+1): 
-	    to_attempt = product(chars, repeat=length)
-	    for attempt in to_attempt:
-	        _file_.write(bytes((''.join(attempt)),'UTF-8'))
+	    liste_new_mdp = product(chars, repeat=length)
+	    for new_mdp in list_new_mdp:
+	        _file_.write(bytes((''.join(new_mdp)),'UTF-8'))
 	        _file_.write(bytes(("\n"),'UTF-8'))
 	#On ferme proprement les fichier
 	_file_.close()
