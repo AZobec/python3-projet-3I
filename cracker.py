@@ -37,7 +37,7 @@ def menu():
 
 #Creation de la fonction itérative qui va envoyer les résultats de l'itération dans un fichier
 def iteration_mdp(destination,chars):
-	_file_ = open(destination_file,"wb")
+	_file_ = open(destination,"wb")
 	print(">>> Renseigner la range voulue au format chiffre;chiffre")
 	_range_ = input("")
 	_range_ = _range_.split(";")
