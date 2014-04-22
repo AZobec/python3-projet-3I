@@ -1,4 +1,4 @@
--_-_-_-_-Projet Python3 3I SI-_-_-_-_-
+----------Projet Python3 3I SI----------
 
 -----Groupe composé de-----
 - Alexandra TOUSSAINT
@@ -6,8 +6,10 @@
 - Arnaud ZOBEC
 --------------------------
 
-V0.1
-First commit du readme non modifié
-
 V0.2
+
 Test du remote
+
+V0.1
+
+First commit du readme non modifié
