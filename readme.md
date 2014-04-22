@@ -9,7 +9,7 @@
 
 V0.2
 
-Test du remote
+Commit du cracker.py et génération de mots de passe en force brute
 
 V0.1
 
