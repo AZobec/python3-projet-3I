@@ -37,17 +37,17 @@ def menu():
 
 #Creation de la fonction itérative qui va envoyer les résultats de l'itération dans un fichier
 def iteration_mdp(destination,chars):
-	_file_ = open(destination,"wb")
+	_file = open(destination,"wb")
 	print(">>> Renseigner la range voulue au format chiffre;chiffre")
-	_range_ = input("")
-	_range_ = _range_.split(";")
-	for length in range(int(_range_[0]), int(_range_[1])+1): 
+	_range = input("")
+	_range = _range.split(";")
+	for length in range(int(_range[0]), int(_range[1])+1): 
 	    liste_new_mdp = product(chars, repeat=length)
 	    for new_mdp in list_new_mdp:
-	        _file_.write(bytes((''.join(new_mdp)),'UTF-8'))
-	        _file_.write(bytes(("\n"),'UTF-8'))
+	        _file.write(bytes((''.join(new_mdp)),'UTF-8'))
+	        _file.write(bytes(("\n"),'UTF-8'))
 	#On ferme proprement les fichier
-	_file_.close()
+	_file.close()
 
 #Fin de la fonction iteration_mdp(destination):
 
