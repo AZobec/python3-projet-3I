@@ -1,8 +1,10 @@
 ----------Projet Python3 3I SI----------
 
------Groupe composé de-----T
+-----Groupe composé de-----
+
 - Baptiste FONTANA
 - Arnaud ZOBEC
+
 --------------------------
 
 V0.2
