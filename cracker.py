@@ -10,6 +10,8 @@
 
 #Gestion des imports
 from itertools import product
+from optparse import OptionParser
+import optparse
 
 #on va demander au client la range qu'il veut taper, s'il veut faire que des minuscules ou pas, etc...
 def menu():
@@ -41,8 +43,9 @@ def iteration_mdp(destination,chars):
 	print(">>> Renseigner la range voulue au format chiffre;chiffre")
 	_range = input("")
 	_range = _range.split(";")
-	for length in range(int(_range[0]), int(_range[1])+1): 
-	    liste_new_mdp = product(chars, repeat=length)
+	for length in range(int(_range[0]), int(_range[1])+1):
+		#intégrer ici le multi-threading?? 
+	    list_new_mdp = product(chars, repeat=length)
 	    for new_mdp in list_new_mdp:
 	        _file.write(bytes((''.join(new_mdp)),'UTF-8'))
 	        _file.write(bytes(("\n"),'UTF-8'))
@@ -54,10 +57,27 @@ def iteration_mdp(destination,chars):
 #début du main
 if __name__ == "__main__":
 	
-	destination_file = "dictionnaire_iteration.txt"
-	charset = menu() #Obtention du choix de l'utilisateur et donc du charset en conséquence
-	print(charset)
-	iteration_mdp(destination_file,charset)
+	dest_file = ""
+
+	#parser d'options
+	parser = optparse.OptionParser()
+
+	#gestion du file
+	parser.add_option("-f", "--file", dest = 'dictionnaire', help= "Choix d'un dictionnaire", metavar = "FILE")
+	parser.add_option("-s", "--server", dest = 'HOST', help = "Choix du serveur à attaquer", metavar = "SERVER")
+	parser.add_option("-w", "--write", dest = 'destination_file', help = "Output du bruteforce", metavar = "FILE")
+
+	options,args = parser.parse_args()
+
+	dest_file = options.destination_file
+
+	
+
+	
+	if  dest_file!= "":
+		charset = menu() #Obtention du choix de l'utilisateur et donc du charset en conséquence
+		print(charset)
+		iteration_mdp(dest_file,charset)
 
 #Fin du main
 	
