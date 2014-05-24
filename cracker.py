@@ -12,6 +12,64 @@
 from itertools import product
 from optparse import OptionParser
 import optparse
+import socket
+import sys
+import getpass
+import hashlib
+
+
+def try_passwords_on_servers(ip_server,port_server,dico_passwd, test_hash):
+	#on ouvre le fichier dictionnaire
+	_file = open(dico_passwd,'r')
+	sock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	try:
+	# connexion au serveur, bloc surveillé, et gestion de l'exception
+	    sock.connect((ip_server,port_server))
+
+	except socket.error:
+	  print("la connexion a échoué.......")
+	  sys.exit()
+
+	print(">>> Connexion établie avec le serveur...")
+	# Envoi et réception de messages
+	msgServer=sock.recv(1024) # taille par défaut
+
+	print(">>> S :", msgServer.decode())
+	msgClient = input(">>> Tapez votre login :")
+	sock.send(msgClient.encode())
+	msgServer = sock.recv(1024)
+	print(msgServer.decode())
+
+	#Ensuite on a la boucle de connexion habituelle
+	test = True
+
+	while test:
+		if msgServer==b'FIN':
+			break
+		else:
+			password = _file.readline()
+			password = password.rstrip('\n')
+			msgClient = password
+			msgClient = msgClient.encode()
+			sock.send(msgClient)
+			print(">>> Password envoyé")
+			msgServer=sock.recv(1024)
+			msgServer = msgServer.decode()
+			if msgServer ==  "True":
+				print(">>> Vous avez trouvé le bon password :")
+				print(password)
+				sock.send(b'__WAIT__')
+				test = False
+				break
+			#on encode le tout en binaire 
+		    
+	#Fin while (1) connexion
+	print (">>> Connexion interrompue proprement par le serveur")
+	#on ferme proprement le socket
+	sock.close()
+	#on ferme ici proprement le fichier
+	_file.close()
+
 
 #on va demander au client la range qu'il veut taper, s'il veut faire que des minuscules ou pas, etc...
 def menu():
@@ -58,26 +116,53 @@ def iteration_mdp(destination,chars):
 if __name__ == "__main__":
 	
 	dest_file = ""
+	dico = ""
+	ip_server = ""
+	port_server = ""
+	test_hash = False
 
 	#parser d'options
 	parser = optparse.OptionParser()
 
 	#gestion du file
-	parser.add_option("-f", "--file", dest = 'dictionnaire', help= "Choix d'un dictionnaire", metavar = "FILE")
-	parser.add_option("-s", "--server", dest = 'HOST', help = "Choix du serveur à attaquer", metavar = "SERVER")
-	parser.add_option("-w", "--write", dest = 'destination_file', help = "Output du bruteforce", metavar = "FILE")
+	parser.add_option("-f", "--file", dest = 'dictionnaire', help= "Choix d'un dictionnaire", metavar = "FILE", default = False)
+	parser.add_option("-s", "--server", dest = 'HOST', help = "Choix du serveur à attaquer", metavar = "SERVER", default = False)
+	parser.add_option("-w", "--write", dest = 'destination_file', help = "Output du bruteforce", metavar = "FILE", default = False)
+	parser.add_option("-p", "--port", dest = 'port', help = "Choix du port", metavar = "PORT", default = False)
+	parser.add_option("-H", "--hash", dest = 'hash', help = "Mot de passe en MD5", metavar = "HASH", default = False)
 
 	options,args = parser.parse_args()
 
-	dest_file = options.destination_file
+	if options.destination_file != False:
+		dest_file = options.destination_file
+	if options.dictionnaire != False:
+		dico = options.dictionnaire
+	if options.HOST != False :
+		ip_server = options.HOST
+	if options.port != False:
+		port_server = int(options.port)
+	if options.hash != False:
+		test_hash = True
 
-	
 
-	
+	#on va maintenant tester chaque option qu'on a reçu et utiliser les fonctions en conséquence 
 	if  dest_file!= "":
 		charset = menu() #Obtention du choix de l'utilisateur et donc du charset en conséquence
 		print(charset)
-		iteration_mdp(dest_file,charset)
+		iteration_mdp(dest_file,charset, test_hash)
+
+	if dico != "":
+		if ip_server != "":
+			if port_server != "":
+				try_passwords_on_servers(ip_server,port_server,dico)
+			else:
+				print(">>> Merci de renseigner un port !")
+				exit(1)
+		else:
+			print(">>> Une IP est nécessaire pour contacter le serveur !")
+	else:
+		print(">>> Il manque un dictionnaire !")
+
+
 
 #Fin du main
-	
